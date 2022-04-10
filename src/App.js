@@ -12,12 +12,12 @@ export default function Home() {
 
   const [reps, setReps] = useState([{ repNumber: "", repWeight: "" }]);
 
-  const handleLift = (e) => {
-    e.persist();
-    setWorkout((workout) => ({
+  const handleChange = (e) => {
+    setWorkout({
       ...workout,
-      lift: e.target.value,
-    }));
+      [e.target.name]: e.target.value,
+    });
+    console.log(workout);
   };
 
   let handleReps = (e, i) => {
@@ -30,28 +30,10 @@ export default function Home() {
     });
   };
 
-  const handleNotes = (e) => {
-    e.persist();
-    setWorkout((workout) => ({
-      ...workout,
-      notes: e.target.value,
-    }));
-  };
-
-  const handleDate = (e) => {
-    e.persist();
-    setWorkout((workout) => ({
-      ...workout,
-      dates: e.target.value,
-    }));
-  };
-
   const createWorkout = (e) => {
     e.preventDefault();
     setWorkout({
-      lift: workout.lift,
-      dates: workout.dates,
-      notes: workout.notes,
+      ...workout,
       set: reps,
     });
   };
@@ -77,7 +59,6 @@ export default function Home() {
 
   useEffect(() => {
     fetchWorkout();
-    console.log(apiResponse);
   }, []);
 
   return (
@@ -94,7 +75,7 @@ export default function Home() {
             type="text"
             placeholder="Lift"
             value={workout.lift}
-            onChange={handleLift}
+            onChange={handleChange}
           />
           <label> Sets </label>
           <button className="button add" type="button" onClick={() => addSet()}>
@@ -135,14 +116,14 @@ export default function Home() {
             type="date"
             placeholder="Date"
             value={workout.dates}
-            onChange={handleDate}
+            onChange={handleChange}
           ></input>
           <label> Notes </label>
           <textarea
             name="notes"
             placeholder="notes"
             value={workout.notes}
-            onChange={handleNotes}
+            onChange={handleChange}
           ></textarea>
           <button type="submit">Submit</button>
         </form>
