@@ -7,6 +7,7 @@ import { render } from "react-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav";
 import Dashboard from "./components/Dashboard";
+import Footer from "./components/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -17,6 +18,7 @@ root.render(
         <Route path="/" element={<App />} />
         <Route path="dashboard" element={<Dashboard />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   </React.StrictMode>
 );
