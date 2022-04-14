@@ -106,21 +106,29 @@ export default function Workout({ selectedDate }) {
   }, []);
 
   return (
-    <div className={"container"}>
-      <main>
-        <h1 className={""}>Workout Tracker {date}</h1>
+    <div className={"container m-auto mt-6 h-fit"}>
+      <main className="flex flex-col justify-center">
+        <h1 className={"text-center"}>Workout Tracker {date}</h1>
 
-        <form className={""} onSubmit={(e) => createWorkout(e)}>
-          <label> Lift </label>
+        <form
+          className={"border-2 border-cyan-600 flex flex-col w-96 m-auto p-6"}
+          onSubmit={(e) => createWorkout(e)}
+        >
+          <label class="text-lg text-center"> Lift </label>
           <input
             name="lift"
             type="text"
+            className="outline outline-cyan-600 w-44 m-auto"
             placeholder="Lift"
             value={workout.lift}
             onChange={handleChange}
           />
-          <label> Sets </label>
-          <button className="button add" type="button" onClick={() => addSet()}>
+          <label className="text-center"> Sets </label>
+          <button
+            className="border bg-cyan-500 w-24"
+            type="button"
+            onClick={() => addSet()}
+          >
             Add
           </button>
 
@@ -130,6 +138,7 @@ export default function Workout({ selectedDate }) {
                 name="repNumber"
                 type="text"
                 placeholder="Reps"
+                className="outline outline-cyan-600 w-44"
                 value={rep.repNumber || ""}
                 onChange={(e) => handleReps(e, index)}
               />
@@ -137,13 +146,14 @@ export default function Workout({ selectedDate }) {
                 name="repWeight"
                 type="text"
                 placeholder="Weight"
+                className="outline outline-cyan-600 w-44"
                 value={rep.repWeight || ""}
                 onChange={(e) => handleReps(e, index)}
               />
               {index ? (
                 <button
                   type="button"
-                  className="button remove"
+                  className="outline bg-red-600 w-44"
                   onClick={() => removeSet(index)}
                 >
                   Remove
@@ -152,121 +162,128 @@ export default function Workout({ selectedDate }) {
             </div>
           ))}
 
-          <label> Notes </label>
+          <label className="text-center"> Notes </label>
           <textarea
             name="notes"
             placeholder="notes"
             value={workout.notes}
+            className="outline outline-cyan-600 w-44 m-auto"
             onChange={handleChange}
           ></textarea>
-          <button type="submit">Submit</button>
+          <button type="submit" className="bg-green-500 w-24 mx-auto mt-6">
+            Submit
+          </button>
         </form>
       </main>
-      {dataLoaded ? (
-        apiResponse.map((exercise) =>
-          !updating ? (
-            <div key={exercise._id}>
-              <p>{exercise._id}</p>
-              <h1>{exercise.name}</h1>
-              <h3>{exercise.date}</h3>
-              <button
-                id={exercise.id}
-                type="button"
-                onClick={() => deleteWorkout(exercise._id)}
-              >
-                delete
-              </button>
-              {exercise.sets.map((set) => (
-                <div key={set._id}>
-                  <ul key={set._id}>
-                    <li>{set.repNumber}</li>
-                    <li>{set.repWeight}</li>
-                  </ul>
-                </div>
-              ))}
-              <p>{exercise.notes}</p>
-              <button
-                type="button"
-                id={exercise._id}
-                onClick={(e) => toggleUpdate(e, exercise._id)}
-              >
-                edit
-              </button>
-            </div>
-          ) : (
-            <div key={exercise._id}>
-              <label> Lift </label>
-              <input
-                name="lift"
-                type="text"
-                placeholder="Lift"
-                value={exercise.lift}
-                onChange={handleUpdate}
-              />
-              <label> Sets </label>
-              <button
-                className="button add"
-                type="button"
-                onClick={() => addSet()}
-              >
-                Add
-              </button>
+      <div className="flex flex-row justify-between my-48">
+        {dataLoaded ? (
+          apiResponse.map((exercise) =>
+            !updating ? (
+              <div className={"border border-blue-500 w-64"} key={exercise._id}>
+                <p>ID: {exercise._id}</p>
+                <h1>{exercise.name}</h1>
+                <h3>{exercise.date}</h3>
+                <button
+                  id={exercise.id}
+                  type="button"
+                  className="w-48 bg-red-500"
+                  onClick={() => deleteWorkout(exercise._id)}
+                >
+                  delete
+                </button>
+                <h3>Sets</h3>
+                {exercise.sets.map((set) => (
+                  <div key={set._id}>
+                    <ul key={set._id} className="flex flex-row justify-evenly">
+                      <li>Reps: {set.repNumber}</li>
+                      <li>Sets: {set.repWeight}</li>
+                    </ul>
+                  </div>
+                ))}
+                <p>{exercise.notes}</p>
+                <button
+                  type="button"
+                  id={exercise._id}
+                  onClick={(e) => toggleUpdate(e, exercise._id)}
+                >
+                  edit
+                </button>
+              </div>
+            ) : (
+              <div key={exercise._id} className="border-green-500 w-48">
+                <label> Lift </label>
+                <input
+                  name="lift"
+                  type="text"
+                  placeholder="Lift"
+                  value={exercise.lift}
+                  onChange={handleUpdate}
+                />
+                <label> Sets </label>
+                <button
+                  className="button add"
+                  type="button"
+                  onClick={() => addSet()}
+                >
+                  Add
+                </button>
 
-              {exercise.sets.map((rep, index) => (
-                <div key={index}>
-                  <input
-                    name="repNumber"
-                    type="text"
-                    placeholder="Reps"
-                    value={rep.repNumber || ""}
-                    onChange={(e) => handleUpdate(e, index)}
-                  />
-                  <input
-                    name="repWeight"
-                    type="text"
-                    placeholder="Weight"
-                    value={rep.repWeight || ""}
-                    onChange={(e) => handleUpdate(e, index)}
-                  />
-                  {index ? (
-                    <button
-                      type="button"
-                      className="button remove"
-                      onClick={() => removeSet(index)}
-                    >
-                      Remove
-                    </button>
-                  ) : null}
-                </div>
-              ))}
+                {exercise.sets.map((rep, index) => (
+                  <div key={index}>
+                    <input
+                      name="repNumber"
+                      type="text"
+                      placeholder="Reps"
+                      value={rep.repNumber || ""}
+                      onChange={(e) => handleUpdate(e, index)}
+                    />
+                    <input
+                      name="repWeight"
+                      type="text"
+                      placeholder="Weight"
+                      value={rep.repWeight || ""}
+                      onChange={(e) => handleUpdate(e, index)}
+                    />
+                    {index ? (
+                      <button
+                        type="button"
+                        className="button remove"
+                        onClick={() => removeSet(index)}
+                      >
+                        Remove
+                      </button>
+                    ) : null}
+                  </div>
+                ))}
 
-              <label> Date </label>
-              <input
-                name="date"
-                type="date"
-                value={exercise.dates}
-                onChange={handleUpdate}
-              ></input>
-              <label> Notes </label>
-              <textarea
-                name="notes"
-                placeholder="notes"
-                value={exercise.notes}
-                onChange={handleUpdate}
-              ></textarea>
-              <button
-                type="button"
-                id={exercise._id}
-                onClick={(e) => updateWorkout(e, exercise._id, exercise)}
-              >
-                update
-              </button>
-            </div>
+                <label> Date </label>
+                <input
+                  name="date"
+                  type="date"
+                  value={exercise.dates}
+                  onChange={handleUpdate}
+                ></input>
+                <label> Notes </label>
+                <textarea
+                  name="notes"
+                  placeholder="notes"
+                  value={exercise.notes}
+                  onChange={handleUpdate}
+                ></textarea>
+                <button
+                  type="button"
+                  id={exercise._id}
+                  onClick={(e) => updateWorkout(e, exercise._id, exercise)}
+                >
+                  update
+                </button>
+              </div>
+            )
           )
-        )
-      ) : (
-        <h1>Loading Data</h1>
-      )}
+        ) : (
+          <h1>Loading Data</h1>
+        )}
+      </div>
     </div>
   );
 }
