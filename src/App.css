@@ -41,6 +41,10 @@
   }
 }
 
-.highlight {
-  color: red;
+.Fire {
+  background-color: green !important;
+}
+
+.test {
+  color: green !important;
 }
