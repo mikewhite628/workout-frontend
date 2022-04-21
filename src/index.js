@@ -8,6 +8,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Nav from "./components/Nav";
 import Dashboard from "./components/Dashboard";
 import Footer from "./components/Footer";
+import EditExercise from "./components/EditExercise";
+import Workout from "./components/Workout";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

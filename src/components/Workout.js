@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import AddExercise from "./AddExercise";
 import EditExercise from "./EditExercise";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 export default function Workout({ checkedDate, selectedDate }) {
   let date = selectedDate.toDateString();
@@ -11,8 +12,8 @@ export default function Workout({ checkedDate, selectedDate }) {
   const [updating, setUpdating] = useState(false);
   const [selectedExercise, setSelectedExercise] = useState({});
 
-  const fetchWorkout = async (date) => {
-    const response = await axios("http://localhost:3001/api/workouts/", {});
+  const fetchWorkout = async () => {
+    const response = await axios("http://localhost:3001/api/workouts/");
     setApiResponse(response.data);
     setDataLoaded(true);
   };
@@ -25,10 +26,12 @@ export default function Workout({ checkedDate, selectedDate }) {
     window.location.reload(false);
   };
 
-  const toggleUpdate = (e, id) => {
+  const toggleUpdate = async (e, apiResponse) => {
     let isUpdating = updating;
     setUpdating(!isUpdating);
     console.log(e.target.id);
+
+    setSelectedExercise(apiResponse.find(({ _id }) => _id === e.target.id));
   };
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export default function Workout({ checkedDate, selectedDate }) {
   return (
     <div className={"container m-auto mt-6 "}>
       <AddExercise date={date} />
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row flex-wrap justify-between">
         {checkedDate.length > 0 ? (
           checkedDate.map((exercise) => (
             <div
@@ -66,10 +69,11 @@ export default function Workout({ checkedDate, selectedDate }) {
                 </div>
               ))}
               <p>{exercise.notes}</p>
+
               <button
                 type="button"
                 id={exercise._id}
-                onClick={(e) => toggleUpdate(e, exercise._id)}
+                onClick={(e) => toggleUpdate(e, apiResponse)}
               >
                 edit
               </button>
@@ -78,9 +82,7 @@ export default function Workout({ checkedDate, selectedDate }) {
         ) : (
           <div> Add a workout</div>
         )}
-        {!updating ? (
-          <EditExercise selectedExercise={selectedExercise} />
-        ) : null}
+        {updating ? <EditExercise selectedExercise={selectedExercise} /> : null}
       </div>
     </div>
   );
